@@ -25,3 +25,11 @@ class User(Base):
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, 
                         server_default=text("now()"))
     posts: Mapped[list["Post"]] = Relationship(back_populates="owner")
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), 
+                                        primary_key=True)
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id", ondelete="CASCADE"), 
+                                        primary_key=True)
