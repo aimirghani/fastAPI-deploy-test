@@ -18,7 +18,7 @@ class UserInput(BaseModel):
 class UserOutput(BaseModel):
     id: int
     email: EmailStr
-    created_at: datetime
+    # created_at: datetime
     
     class Config:
         orm_mode = True
@@ -32,16 +32,27 @@ class PostBase(BaseModel):
 
 
 class PostInput(PostBase):
-    published: Optional[bool] = None
+    published: Optional[bool] = True
 
 
 class PostOutput(PostInput):
     id: int
-    owner_id: int
+    created_at: datetime
+    owner: UserOutput
     
     class Config:
         orm_mode = True
 
+
+class PostOutputInUser(PostInput):
+    id: int
+    
+    class Config:
+        orm_mode = True
+
+
+class UserOutputWithPosts(UserOutput):
+    posts: list[PostOutputInUser]
 
 # ***************************** Token **********************************
 

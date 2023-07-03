@@ -1,5 +1,5 @@
 from sqlalchemy import Column, text, TIMESTAMP, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, Relationship
 from app.database import Base
 
 
@@ -12,7 +12,9 @@ class Post(Base):
     published: Mapped[bool] = mapped_column(nullable=False, server_default=text("TRUE"))
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, 
                         server_default=text("now()"))
-    owner_id: Mapped[bool] = mapped_column(ForeignKey("users.id"), nullable=False)
+    owner_id: Mapped[bool] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), 
+                                            nullable=False)
+    owner: Mapped["User"] = Relationship(back_populates="posts")
 
 
 class User(Base):
@@ -22,3 +24,4 @@ class User(Base):
     password: Mapped[str] = mapped_column(nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, 
                         server_default=text("now()"))
+    posts: Mapped[list["Post"]] = Relationship(back_populates="owner")

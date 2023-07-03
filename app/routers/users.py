@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app import schemas
 from app.models import User
-from app import utils
+from app.security import utils, oauth2
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -27,3 +27,10 @@ def create_post(user_payload: schemas.UserInput, db: Annotated[Session, Depends(
     db.refresh(new_user)
     
     return new_user
+
+
+@router.get("/", response_model=schemas.UserOutputWithPosts)
+def create_post(db: Annotated[Session, Depends(get_db)],
+                curr_user: Annotated[schemas.UserOutput, Depends(oauth2.get_current_user)]):
+    
+    return curr_user

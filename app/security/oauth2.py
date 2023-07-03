@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.config import settings
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
+from app.config import settings
 from app import database, models, schemas
 
 
